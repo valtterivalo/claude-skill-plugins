@@ -21,6 +21,13 @@
       "description": "Manage Linear issues and projects - search, create, update issues, track sprints",
       "keywords": ["linear", "issues", "projects", "sprints", "tickets"],
       "skills": ["./linear/skills/linear"]
+    },
+    {
+      "name": "supabase",
+      "source": "./supabase",
+      "description": "Query and manage Supabase databases - CRUD operations, RPC functions, table introspection",
+      "keywords": ["supabase", "postgres", "database", "sql", "backend"],
+      "skills": ["./supabase/skills/supabase"]
     }
   ],
   "metadata": {
