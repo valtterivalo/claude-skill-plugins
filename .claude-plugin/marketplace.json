@@ -7,6 +7,13 @@
       "description": "Manage Neon PostgreSQL databases - projects, branches, SQL queries",
       "keywords": ["neon", "postgres", "database", "sql"],
       "skills": ["./neon/skills/neon"]
+    },
+    {
+      "name": "notion",
+      "source": "./notion",
+      "description": "Access Notion workspace - search pages, query databases, read and create content",
+      "keywords": ["notion", "docs", "database", "wiki", "notes"],
+      "skills": ["./notion/skills/notion"]
     }
   ],
   "metadata": {
