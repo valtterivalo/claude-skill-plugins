@@ -1,5 +1,8 @@
 {
   "name": "skill-plugins",
+  "owner": {
+    "name": "Valtteri Valo"
+  },
   "plugins": [
     {
       "name": "neon",
