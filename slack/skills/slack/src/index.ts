@@ -302,6 +302,7 @@ async function main() {
 
     const server = app.listen(PORT, "127.0.0.1", () => {
       console.log(`Slack skill server running on http://127.0.0.1:${PORT}`);
+      console.log("Ready");
     });
 
     const shutdown = () => {

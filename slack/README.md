@@ -16,20 +16,20 @@ The plugin stores configuration in your home directory, separate from the plugin
 
 ```bash
 mkdir -p ~/.config/slack-plugin
-echo "SLACK_BOT_TOKEN=xoxb-..." > ~/.config/slack-plugin/.env
+echo "SLACK_BOT_TOKEN=xoxp-..." > ~/.config/slack-plugin/.env
 ```
 
-### Getting a Bot Token
+### Getting a User Token
 
 1. Go to [Slack API Apps](https://api.slack.com/apps)
 2. Click **Create New App** > **From scratch**
 3. Name your app and select your workspace
 4. Go to **OAuth & Permissions** in the sidebar
-5. Under **Scopes > Bot Token Scopes**, add the required scopes (see below)
+5. Under **Scopes > User Token Scopes**, add the required scopes (see below)
 6. Click **Install to Workspace** and authorize
-7. Copy the **Bot User OAuth Token** (starts with `xoxb-`)
+7. Copy the **User OAuth Token** (starts with `xoxp-`)
 
-### Required Bot Token Scopes
+### Required User Token Scopes
 
 | Scope | Required For |
 |-------|--------------|
@@ -75,7 +75,7 @@ Once configured, Claude will automatically start the server when you ask about S
 
 **Server won't start**: Check that `~/.config/slack-plugin/.env` exists and contains a valid `SLACK_BOT_TOKEN`.
 
-**Authentication errors**: Verify your token starts with `xoxb-` and hasn't been revoked.
+**Authentication errors**: Verify your token starts with `xoxp-` and hasn't been revoked.
 
 **Permission errors**: Check your bot has the required scopes in the Slack app settings.
 

@@ -11,7 +11,6 @@ These plugins use HTTP server patterns instead of MCP for lighter-weight integra
 | Plugin | Port | Description | Config |
 |--------|------|-------------|--------|
 | [Neon](./neon/) | 9224 | PostgreSQL database management, SQL queries, branches | `NEON_API_KEY` |
-| [Notion](./notion/) | 9225 | Pages, databases, blocks, search, comments | `NOTION_API_KEY` |
 | [Linear](./linear/) | 9226 | Issues, projects, teams, cycles, labels | `LINEAR_API_KEY` |
 | [Supabase](./supabase/) | 9227 | CRUD operations, RPC functions, table introspection | `SUPABASE_URL`, `SUPABASE_SERVICE_KEY` |
 | [Slack](./slack/) | 9228 | Channels, messages, users, reactions, files | `SLACK_BOT_TOKEN` |
@@ -28,7 +27,6 @@ Install individual plugins:
 
 ```bash
 /plugins install neon
-/plugins install notion
 /plugins install linear
 /plugins install supabase
 /plugins install slack
@@ -42,10 +40,6 @@ Each plugin stores its configuration in `~/.config/<plugin>-plugin/.env`:
 # Neon
 mkdir -p ~/.config/neon-plugin
 echo "NEON_API_KEY=napi_..." > ~/.config/neon-plugin/.env
-
-# Notion
-mkdir -p ~/.config/notion-plugin
-echo "NOTION_API_KEY=secret_..." > ~/.config/notion-plugin/.env
 
 # Linear
 mkdir -p ~/.config/linear-plugin
@@ -138,7 +132,6 @@ These plugins are designed for per-session use:
 Once configured, just ask Claude naturally:
 
 - "Show me my Neon projects"
-- "Search Notion for meeting notes"
 - "Create a Linear issue for the login bug"
 - "Query users from Supabase where status is active"
 - "Send a Slack message to #general"

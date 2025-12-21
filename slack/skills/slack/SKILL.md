@@ -38,7 +38,7 @@ If the server exits with setup instructions, guide the user:
 
 2. Create a Slack app at https://api.slack.com/apps
 
-3. Add these bot token scopes under OAuth & Permissions:
+3. Add these user token scopes under OAuth & Permissions:
    - `channels:read`, `channels:join`, `channels:manage`
    - `groups:read`, `im:read`, `mpim:read`
    - `chat:write`
@@ -48,11 +48,11 @@ If the server exits with setup instructions, guide the user:
 
 4. Install the app to your workspace
 
-5. Copy the "Bot User OAuth Token" (starts with `xoxb-`)
+5. Copy the "User OAuth Token" (starts with `xoxp-`)
 
 6. Create the config file:
    ```bash
-   echo "SLACK_BOT_TOKEN=xoxb-..." > ~/.config/slack-plugin/.env
+   echo "SLACK_BOT_TOKEN=xoxp-..." > ~/.config/slack-plugin/.env
    ```
 
 7. Restart the server

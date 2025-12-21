@@ -84,5 +84,5 @@ export function handleSupabaseError(error: unknown): never {
   }
 
   const sanitized = sanitizeError(error);
-  throw new SupabaseSkillError(sanitized);
+  throw new SupabaseSkillError(sanitized.message, String(sanitized.status));
 }

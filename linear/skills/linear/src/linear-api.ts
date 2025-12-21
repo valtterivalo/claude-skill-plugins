@@ -4,26 +4,18 @@
  */
 
 import { LinearClient } from "@linear/sdk";
-import type {
-  LinearConfig,
-  IssueResult,
-  ProjectResult,
-  TeamResult,
-  UserResult,
-  CycleResult,
-  LabelResult,
-  CommentResult,
+import {
   PRIORITY_LABELS,
+  type LinearConfig,
+  type IssueResult,
+  type ProjectResult,
+  type TeamResult,
+  type UserResult,
+  type CycleResult,
+  type LabelResult,
+  type CommentResult,
 } from "./types.ts";
 import { isIssueIdentifier } from "./validation.ts";
-
-const priorityLabels: Record<number, string> = {
-  0: "No priority",
-  1: "Urgent",
-  2: "High",
-  3: "Medium",
-  4: "Low",
-};
 
 export function createLinearClient(config: LinearConfig) {
   const client = new LinearClient({ apiKey: config.apiKey });
@@ -40,7 +32,7 @@ export function createLinearClient(config: LinearConfig) {
       title: issue.title,
       description: issue.description ?? undefined,
       priority: issue.priority,
-      priorityLabel: priorityLabels[issue.priority] ?? "Unknown",
+      priorityLabel: PRIORITY_LABELS[issue.priority] ?? "Unknown",
       state: (() => {
         if (!state) throw new Error("Issue state not found");
         return { id: state.id, name: state.name, type: state.type };
