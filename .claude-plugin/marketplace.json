@@ -1,0 +1,16 @@
+{
+  "name": "skill-plugins",
+  "plugins": [
+    {
+      "name": "neon",
+      "source": "./neon",
+      "description": "Manage Neon PostgreSQL databases - projects, branches, SQL queries",
+      "keywords": ["neon", "postgres", "database", "sql"],
+      "skills": ["./neon/skills/neon"]
+    }
+  ],
+  "metadata": {
+    "description": "Skill plugins for Claude Code",
+    "version": "1.0.0"
+  }
+}

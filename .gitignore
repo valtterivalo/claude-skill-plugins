@@ -1,0 +1,24 @@
+# dependencies
+node_modules/
+
+# environment files (never commit secrets)
+.env
+.env.*
+*.env
+
+# build outputs
+dist/
+*.log
+
+# os files
+.DS_Store
+Thumbs.db
+
+# editor
+.vscode/
+.idea/
+
+# lock files (each plugin manages its own)
+bun.lockb
+package-lock.json
+pnpm-lock.yaml
