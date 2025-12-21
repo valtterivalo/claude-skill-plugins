@@ -10,10 +10,10 @@ A collection of skill plugins for Claude Code.
 
 ## Installation
 
-Once published to GitHub, install the marketplace:
+Install the marketplace:
 
 ```bash
-/plugins add https://github.com/<your-username>/claude-skill-plugins
+/plugins add https://github.com/valtterivalo/claude-skill-plugins
 ```
 
 Then install individual plugins:
