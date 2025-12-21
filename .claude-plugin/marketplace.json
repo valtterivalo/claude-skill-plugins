@@ -28,6 +28,13 @@
       "description": "Query and manage Supabase databases - CRUD operations, RPC functions, table introspection",
       "keywords": ["supabase", "postgres", "database", "sql", "backend"],
       "skills": ["./supabase/skills/supabase"]
+    },
+    {
+      "name": "slack",
+      "source": "./slack",
+      "description": "Send messages, manage channels, list users, add reactions in Slack",
+      "keywords": ["slack", "messaging", "channels", "chat", "team"],
+      "skills": ["./slack/skills/slack"]
     }
   ],
   "metadata": {
