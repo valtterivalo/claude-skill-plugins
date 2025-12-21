@@ -14,6 +14,13 @@
       "description": "Access Notion workspace - search pages, query databases, read and create content",
       "keywords": ["notion", "docs", "database", "wiki", "notes"],
       "skills": ["./notion/skills/notion"]
+    },
+    {
+      "name": "linear",
+      "source": "./linear",
+      "description": "Manage Linear issues and projects - search, create, update issues, track sprints",
+      "keywords": ["linear", "issues", "projects", "sprints", "tickets"],
+      "skills": ["./linear/skills/linear"]
     }
   ],
   "metadata": {
