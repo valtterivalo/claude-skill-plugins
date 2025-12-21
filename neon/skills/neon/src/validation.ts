@@ -42,5 +42,34 @@ export function validateOptionalString(value: unknown, schema: z.ZodString): str
 
 export function isSelectQuery(query: string): boolean {
   const normalized = query.trim().toUpperCase();
-  return normalized.startsWith("SELECT") || normalized.startsWith("WITH");
+
+  if (!normalized.startsWith("SELECT") && !normalized.startsWith("WITH")) {
+    return false;
+  }
+
+  if (query.includes(";")) {
+    return false;
+  }
+
+  const dangerousKeywords = [
+    "INSERT",
+    "UPDATE",
+    "DELETE",
+    "DROP",
+    "TRUNCATE",
+    "ALTER",
+    "CREATE",
+    "GRANT",
+    "REVOKE",
+    "EXECUTE",
+  ];
+
+  for (const keyword of dangerousKeywords) {
+    const regex = new RegExp(`\\b${keyword}\\b`, "i");
+    if (regex.test(query)) {
+      return false;
+    }
+  }
+
+  return true;
 }

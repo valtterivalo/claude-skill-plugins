@@ -105,11 +105,27 @@ export function createNotionClient(config: NotionConfig) {
     }
   }
 
-  async function getBlockChildren(blockId: string): Promise<string[]> {
+  const MAX_DEPTH = 3;
+  const MAX_BLOCKS = 500;
+
+  async function getBlockChildren(
+    blockId: string,
+    depth = 0,
+    blockCount = { value: 0 }
+  ): Promise<string[]> {
+    if (depth >= MAX_DEPTH) {
+      return ["[content truncated - max depth reached]"];
+    }
+
     const lines: string[] = [];
     let cursor: string | undefined;
 
     do {
+      if (blockCount.value >= MAX_BLOCKS) {
+        lines.push("[content truncated - max blocks reached]");
+        break;
+      }
+
       const response = await client.blocks.children.list({
         block_id: blockId,
         start_cursor: cursor,
@@ -117,18 +133,21 @@ export function createNotionClient(config: NotionConfig) {
       });
 
       for (const block of response.results) {
+        if (blockCount.value >= MAX_BLOCKS) break;
+        blockCount.value++;
+
         const b = block as BlockObjectResponse;
         const text = blockToText(b);
         if (text) lines.push(text);
 
-        if (b.has_children) {
-          const children = await getBlockChildren(b.id);
+        if (b.has_children && depth < MAX_DEPTH - 1) {
+          const children = await getBlockChildren(b.id, depth + 1, blockCount);
           lines.push(...children.map((l) => "  " + l));
         }
       }
 
       cursor = response.has_more ? (response.next_cursor ?? undefined) : undefined;
-    } while (cursor);
+    } while (cursor && blockCount.value < MAX_BLOCKS);
 
     return lines;
   }

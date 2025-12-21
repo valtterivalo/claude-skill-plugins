@@ -20,7 +20,7 @@ import {
 } from "./slack-api.ts";
 import type { ActionRequest, ActionResponse } from "./types.ts";
 
-const PORT = 9228;
+const PORT = parseInt(process.env.PORT ?? "9228", 10);
 const CONFIG_DIR = join(homedir(), ".config", "slack-plugin");
 const ENV_FILE = join(CONFIG_DIR, ".env");
 
@@ -96,7 +96,9 @@ async function handleChannelsAction(
       return channels.join(validated.channelId);
     }
     default:
-      throw new SlackSkillError(`Unknown channels action: ${action}`);
+      throw new SlackSkillError(
+        `Unknown channels action: ${action}. Available: list, info, members, create, archive, join`
+      );
   }
 }
 
@@ -122,7 +124,9 @@ async function handleMessagesAction(
       return messages.history(validated);
     }
     default:
-      throw new SlackSkillError(`Unknown messages action: ${action}`);
+      throw new SlackSkillError(
+        `Unknown messages action: ${action}. Available: post, update, delete, history`
+      );
   }
 }
 
@@ -148,7 +152,9 @@ async function handleUsersAction(
       return users.me();
     }
     default:
-      throw new SlackSkillError(`Unknown users action: ${action}`);
+      throw new SlackSkillError(
+        `Unknown users action: ${action}. Available: list, info, lookup_by_email, me`
+      );
   }
 }
 
@@ -178,7 +184,9 @@ async function handleReactionsAction(
       return reactions.get(validated.channel, validated.timestamp);
     }
     default:
-      throw new SlackSkillError(`Unknown reactions action: ${action}`);
+      throw new SlackSkillError(
+        `Unknown reactions action: ${action}. Available: add, remove, get`
+      );
   }
 }
 
@@ -196,7 +204,9 @@ async function handleFilesAction(
       return files.info(validated.fileId);
     }
     default:
-      throw new SlackSkillError(`Unknown files action: ${action}`);
+      throw new SlackSkillError(
+        `Unknown files action: ${action}. Available: list, info`
+      );
   }
 }
 
@@ -290,9 +300,19 @@ async function main() {
     initClient(config);
     console.log("Slack client initialized");
 
-    app.listen(PORT, "127.0.0.1", () => {
+    const server = app.listen(PORT, "127.0.0.1", () => {
       console.log(`Slack skill server running on http://127.0.0.1:${PORT}`);
     });
+
+    const shutdown = () => {
+      console.log("Shutting down...");
+      server.close(() => {
+        process.exit(0);
+      });
+    };
+
+    process.on("SIGINT", shutdown);
+    process.on("SIGTERM", shutdown);
   } catch (error) {
     const sanitized = sanitizeError(error);
     console.error("Failed to start server:", sanitized.message);

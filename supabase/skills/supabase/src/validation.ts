@@ -4,6 +4,21 @@
 
 import { z } from "zod";
 
+const sqlIdentifierPattern = /^[a-zA-Z_][a-zA-Z0-9_]*$/;
+const columnsPattern = /^(\*|[a-zA-Z_][a-zA-Z0-9_]*(\s*,\s*[a-zA-Z_][a-zA-Z0-9_]*)*)$/;
+
+const columnNameSchema = z.string().min(1).regex(sqlIdentifierPattern, {
+  message: "Invalid column name. Must start with letter/underscore, contain only letters/numbers/underscores",
+});
+
+const columnsSelectSchema = z.string().regex(columnsPattern, {
+  message: "Invalid columns format. Use * or comma-separated column names",
+}).optional();
+
+const tableNameSchema = z.string().min(1).max(63).regex(sqlIdentifierPattern, {
+  message: "Invalid table name. Must be a valid SQL identifier",
+});
+
 const filterOperatorSchema = z.enum([
   "eq",
   "neq",
@@ -21,20 +36,20 @@ const filterOperatorSchema = z.enum([
 ]);
 
 const filterConditionSchema = z.object({
-  column: z.string().min(1),
+  column: columnNameSchema,
   op: filterOperatorSchema,
   value: z.unknown(),
 });
 
 const orderConfigSchema = z.object({
-  column: z.string().min(1),
+  column: columnNameSchema,
   ascending: z.boolean().optional(),
   nullsFirst: z.boolean().optional(),
 });
 
 const selectParamsSchema = z.object({
-  table: z.string().min(1),
-  columns: z.string().optional(),
+  table: tableNameSchema,
+  columns: columnsSelectSchema,
   filter: z.array(filterConditionSchema).optional(),
   order: orderConfigSchema.optional(),
   limit: z.number().int().positive().optional(),
@@ -43,47 +58,53 @@ const selectParamsSchema = z.object({
 });
 
 const insertParamsSchema = z.object({
-  table: z.string().min(1),
+  table: tableNameSchema,
   data: z.union([z.record(z.unknown()), z.array(z.record(z.unknown()))]),
-  returning: z.string().optional(),
+  returning: columnsSelectSchema,
 });
 
 const updateParamsSchema = z.object({
-  table: z.string().min(1),
+  table: tableNameSchema,
   data: z.record(z.unknown()),
   filter: z.array(filterConditionSchema).min(1),
-  returning: z.string().optional(),
+  returning: columnsSelectSchema,
 });
 
 const upsertParamsSchema = z.object({
-  table: z.string().min(1),
+  table: tableNameSchema,
   data: z.union([z.record(z.unknown()), z.array(z.record(z.unknown()))]),
-  onConflict: z.string().optional(),
-  returning: z.string().optional(),
+  onConflict: columnNameSchema.optional(),
+  returning: columnsSelectSchema,
 });
 
 const deleteParamsSchema = z.object({
-  table: z.string().min(1),
+  table: tableNameSchema,
   filter: z.array(filterConditionSchema).min(1),
-  returning: z.string().optional(),
+  returning: columnsSelectSchema,
 });
 
+const schemaNameSchema = z.string().min(1).max(63).regex(sqlIdentifierPattern, {
+  message: "Invalid schema name. Must be a valid SQL identifier",
+}).optional();
+
 const rpcParamsSchema = z.object({
-  function: z.string().min(1),
+  function: z.string().min(1).max(63).regex(sqlIdentifierPattern, {
+    message: "Invalid function name. Must be a valid SQL identifier",
+  }),
   args: z.record(z.unknown()).optional(),
 });
 
 const listTablesParamsSchema = z.object({
-  schema: z.string().optional(),
+  schema: schemaNameSchema,
 });
 
 const describeTableParamsSchema = z.object({
-  table: z.string().min(1),
-  schema: z.string().optional(),
+  table: tableNameSchema,
+  schema: schemaNameSchema,
 });
 
 const listFunctionsParamsSchema = z.object({
-  schema: z.string().optional(),
+  schema: schemaNameSchema,
 });
 
 export const actionSchemas = {
