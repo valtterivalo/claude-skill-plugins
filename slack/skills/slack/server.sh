@@ -13,16 +13,16 @@ if [ ! -f "$ENV_FILE" ]; then
     echo "2. Create a Slack app at https://api.slack.com/apps"
     echo "3. Add required bot scopes (see README)"
     echo "4. Install the app to your workspace"
-    echo "5. Copy the Bot User OAuth Token"
-    echo "6. Create config: echo 'SLACK_BOT_TOKEN=xoxb-...' > ~/.config/slack-plugin/.env"
+    echo "5. Copy the User OAuth Token"
+    echo "6. Create config: echo 'SLACK_BOT_TOKEN=xoxp-...' > ~/.config/slack-plugin/.env"
     echo ""
     exit 1
 fi
 
 export $(grep -v '^#' "$ENV_FILE" | xargs)
 
-if [[ ! "$SLACK_BOT_TOKEN" =~ ^xoxb- ]]; then
-    echo "Error: Invalid token format. Must be a bot token starting with 'xoxb-'"
+if [[ ! "$SLACK_BOT_TOKEN" =~ ^xoxp- ]]; then
+    echo "Error: Invalid token format. Must be a user token starting with 'xoxp-'"
     exit 1
 fi
 

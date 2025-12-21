@@ -56,9 +56,9 @@ function loadConfig(): { botToken: string } {
     );
   }
 
-  if (!botToken.startsWith("xoxb-")) {
+  if (!botToken.startsWith("xoxp-")) {
     throw new SlackSkillError(
-      "Invalid token format. Must be a bot token starting with xoxb-",
+      "Invalid token format. Must be a user token starting with xoxp-",
       "CONFIG_INVALID"
     );
   }
