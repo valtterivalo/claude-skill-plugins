@@ -1,7 +1,7 @@
 # dependencies
 node_modules/
 
-# environment files (never commit secrets)
+# environment files
 .env
 .env.*
 *.env
