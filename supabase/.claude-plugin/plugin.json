@@ -1,0 +1,7 @@
+{
+  "name": "supabase",
+  "description": "Query and manage Supabase databases - CRUD operations, RPC functions, table introspection",
+  "author": {
+    "name": "Valtteri Valo"
+  }
+}

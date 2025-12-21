@@ -18,7 +18,7 @@ curl -s http://localhost:9224/health 2>/dev/null || echo "not running"
 ### 2. Start Server if Not Running
 
 ```bash
-cd ~/.claude/plugins/skill-plugins/neon/skills/neon && ./server.sh &
+./skills/neon/server.sh &
 ```
 
 Wait a moment, then verify:

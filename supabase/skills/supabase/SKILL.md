@@ -18,7 +18,7 @@ curl -s http://localhost:9227/health 2>/dev/null || echo "not running"
 ### 2. Start Server if Not Running
 
 ```bash
-cd ~/.claude/plugins/skill-plugins/supabase/skills/supabase && ./server.sh &
+./skills/supabase/server.sh &
 ```
 
 Wait a moment, then verify:

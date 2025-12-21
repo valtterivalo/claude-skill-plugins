@@ -18,7 +18,7 @@ curl -s http://localhost:9226/health 2>/dev/null || echo "not running"
 ### 2. Start Server if Not Running
 
 ```bash
-cd ~/.claude/plugins/skill-plugins/linear/skills/linear && ./server.sh &
+./skills/linear/server.sh &
 ```
 
 Wait a moment, then verify:

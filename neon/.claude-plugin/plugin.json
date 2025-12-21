@@ -1,0 +1,7 @@
+{
+  "name": "neon",
+  "description": "Manage Neon PostgreSQL databases - projects, branches, SQL queries",
+  "author": {
+    "name": "Valtteri Valo"
+  }
+}

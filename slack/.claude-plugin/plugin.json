@@ -1,0 +1,7 @@
+{
+  "name": "slack",
+  "description": "Send messages, manage channels, list users, add reactions in Slack",
+  "author": {
+    "name": "Valtteri Valo"
+  }
+}

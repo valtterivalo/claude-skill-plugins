@@ -1,0 +1,7 @@
+{
+  "name": "linear",
+  "description": "Manage Linear issues and projects - search, create, update issues, track sprints",
+  "author": {
+    "name": "Valtteri Valo"
+  }
+}

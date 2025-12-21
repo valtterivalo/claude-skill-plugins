@@ -18,7 +18,7 @@ curl -s http://localhost:9228/health 2>/dev/null || echo "not running"
 ### 2. Start Server if Not Running
 
 ```bash
-cd ~/.claude/plugins/skill-plugins/slack/skills/slack && ./server.sh &
+./skills/slack/server.sh &
 ```
 
 Wait a moment, then verify:
