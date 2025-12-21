@@ -4,7 +4,7 @@ A collection of skill plugins for Claude Code that provide lightweight, context-
 
 ## Why Skill Plugins?
 
-These plugins use HTTP server patterns instead of MCP, reducing context usage by ~99.6%. Each plugin runs as a local Express server that Claude interacts with via curl and JSON payloads - adding only ~200 bytes to context per interaction instead of ~50KB for MCP tools.
+These plugins use HTTP server patterns instead of MCP for lighter-weight integrations. Each plugin runs as a local Express server that Claude interacts with via curl and JSON payloads.
 
 ## Available Plugins
 
