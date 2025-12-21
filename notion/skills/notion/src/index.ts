@@ -37,7 +37,7 @@ if (!API_KEY.startsWith("secret_")) {
 const client = createNotionClient({ apiKey: API_KEY });
 
 const app = express();
-app.use(express.json());
+app.use(express.json({ limit: "10kb" }));
 
 app.get("/", (_req, res) => {
   res.json({

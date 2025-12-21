@@ -15,6 +15,11 @@ import {
   roleNameSchema,
   schemaNameSchema,
   tableNameSchema,
+  projectNameSchema,
+  branchNameSchema,
+  regionIdSchema,
+  querySchema,
+  queryParamsSchema,
 } from "./validation.ts";
 import { sanitizeError } from "./errors.ts";
 
@@ -48,7 +53,7 @@ const client = createNeonClient({
 });
 
 const app = express();
-app.use(express.json());
+app.use(express.json({ limit: "10kb" }));
 
 app.get("/", (_req, res) => {
   res.json({
@@ -114,9 +119,8 @@ async function handleProjectsAction(
       return client.projects.get(projectId);
     }
     case "create": {
-      const name = params.name as string;
-      if (!name || typeof name !== "string") throw new Error("name is required");
-      const regionId = params.regionId as string | undefined;
+      const name = projectNameSchema.parse(params.name);
+      const regionId = regionIdSchema.parse(params.regionId);
       return client.projects.create(name, regionId);
     }
     case "delete": {
@@ -144,9 +148,8 @@ async function handleBranchesAction(
       return client.branches.get(projectId, branchId);
     }
     case "create": {
-      const name = params.name as string;
-      if (!name || typeof name !== "string") throw new Error("name is required");
-      const parentId = params.parentId as string | undefined;
+      const name = branchNameSchema.parse(params.name);
+      const parentId = validateOptionalString(params.parentId, branchNameSchema);
       return client.branches.create(projectId, name, parentId);
     }
     case "delete": {
@@ -199,7 +202,7 @@ async function handleConnectionAction(
         };
       }
 
-      const branchId = params.branchId as string | undefined;
+      const branchId = validateOptionalString(params.branchId, branchNameSchema);
       const databaseName = validateOptionalString(params.databaseName, databaseNameSchema);
       const roleName = validateOptionalString(params.roleName, roleNameSchema);
 
@@ -223,7 +226,7 @@ async function handleSqlAction(
   params: Record<string, unknown>
 ): Promise<unknown> {
   const projectId = validateProjectId(params.projectId);
-  const branchId = params.branchId as string | undefined;
+  const branchId = validateOptionalString(params.branchId, branchNameSchema);
   const databaseName = validateOptionalString(params.databaseName, databaseNameSchema);
   const roleName = validateOptionalString(params.roleName, roleNameSchema);
 
@@ -236,14 +239,12 @@ async function handleSqlAction(
 
   switch (action) {
     case "run": {
-      const query = params.query as string;
-      if (!query || typeof query !== "string") throw new Error("query is required");
-      const queryParams = (params.params as unknown[]) ?? [];
-      return client.sql.run(connectionUri, query, queryParams);
+      const query = querySchema.parse(params.query);
+      const sqlParams = queryParamsSchema.parse(params.params) ?? [];
+      return client.sql.run(connectionUri, query, sqlParams);
     }
     case "explain": {
-      const query = params.query as string;
-      if (!query || typeof query !== "string") throw new Error("query is required");
+      const query = querySchema.parse(params.query);
       return { plan: await client.sql.explain(connectionUri, query) };
     }
     default:
@@ -257,7 +258,7 @@ async function handleTablesAction(
   params: Record<string, unknown>
 ): Promise<unknown> {
   const projectId = validateProjectId(params.projectId);
-  const branchId = params.branchId as string | undefined;
+  const branchId = validateOptionalString(params.branchId, branchNameSchema);
   const databaseName = validateOptionalString(params.databaseName, databaseNameSchema);
   const roleName = validateOptionalString(params.roleName, roleNameSchema);
 

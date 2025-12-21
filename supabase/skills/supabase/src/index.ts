@@ -24,9 +24,12 @@ import {
 } from "./supabase-api.ts";
 import type { ActionRequest, ActionResponse } from "./types.ts";
 
-const PORT = 9227;
+const PORT = parseInt(process.env.PORT ?? "9227", 10);
 const CONFIG_DIR = join(homedir(), ".config", "supabase-plugin");
 const ENV_FILE = join(CONFIG_DIR, ".env");
+
+const SUPABASE_URL_PATTERN = /^https:\/\/[a-z0-9-]+\.supabase\.co$/;
+const JWT_PATTERN = /^eyJ[A-Za-z0-9_-]+\.[A-Za-z0-9_-]+\.[A-Za-z0-9_-]+$/;
 
 function loadConfig(): { url: string; serviceKey: string } {
   if (!existsSync(ENV_FILE)) {
@@ -64,6 +67,20 @@ function loadConfig(): { url: string; serviceKey: string } {
   if (!serviceKey) {
     throw new SupabaseSkillError(
       "SUPABASE_SERVICE_KEY not found in config",
+      "CONFIG_INVALID"
+    );
+  }
+
+  if (!SUPABASE_URL_PATTERN.test(url)) {
+    throw new SupabaseSkillError(
+      "Invalid SUPABASE_URL format. Expected: https://<project>.supabase.co",
+      "CONFIG_INVALID"
+    );
+  }
+
+  if (!JWT_PATTERN.test(serviceKey)) {
+    throw new SupabaseSkillError(
+      "Invalid SUPABASE_SERVICE_KEY format. Expected JWT token starting with eyJ",
       "CONFIG_INVALID"
     );
   }
@@ -132,12 +149,13 @@ async function handleAction(request: ActionRequest): Promise<ActionResponse> {
         error: `Validation error: ${error.errors.map((e) => `${e.path.join(".")}: ${e.message}`).join(", ")}`,
       };
     }
-    return { success: false, error: sanitizeError(error) };
+    const sanitized = sanitizeError(error);
+    return { success: false, error: sanitized.message };
   }
 }
 
 const app = express();
-app.use(express.json());
+app.use(express.json({ limit: "10kb" }));
 
 app.get("/health", (_req, res) => {
   res.json({ status: "ok", service: "supabase-skill", port: PORT });
@@ -172,11 +190,22 @@ async function main() {
     initClient(config.url, config.serviceKey);
     console.log("Supabase client initialized");
 
-    app.listen(PORT, "127.0.0.1", () => {
+    const server = app.listen(PORT, "127.0.0.1", () => {
       console.log(`Supabase skill server running on http://127.0.0.1:${PORT}`);
     });
+
+    const shutdown = () => {
+      console.log("Shutting down...");
+      server.close(() => {
+        process.exit(0);
+      });
+    };
+
+    process.on("SIGINT", shutdown);
+    process.on("SIGTERM", shutdown);
   } catch (error) {
-    console.error("Failed to start server:", sanitizeError(error));
+    const sanitized = sanitizeError(error);
+    console.error("Failed to start server:", sanitized.message);
     process.exit(1);
   }
 }

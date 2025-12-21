@@ -41,21 +41,19 @@ export function createLinearClient(config: LinearConfig) {
       description: issue.description ?? undefined,
       priority: issue.priority,
       priorityLabel: priorityLabels[issue.priority] ?? "Unknown",
-      state: state ? {
-        id: state.id,
-        name: state.name,
-        type: state.type,
-      } : { id: "", name: "Unknown", type: "unknown" },
+      state: (() => {
+        if (!state) throw new Error("Issue state not found");
+        return { id: state.id, name: state.name, type: state.type };
+      })(),
       assignee: assignee ? {
         id: assignee.id,
         name: assignee.name,
         email: assignee.email,
       } : undefined,
-      team: team ? {
-        id: team.id,
-        key: team.key,
-        name: team.name,
-      } : { id: "", key: "", name: "Unknown" },
+      team: (() => {
+        if (!team) throw new Error("Issue team not found");
+        return { id: team.id, key: team.key, name: team.name };
+      })(),
       labels: labelsConn.nodes.map((l) => ({
         id: l.id,
         name: l.name,
@@ -316,14 +314,12 @@ export function createLinearClient(config: LinearConfig) {
 
         for (const comment of comments.nodes) {
           const user = await comment.user;
+          if (!user) throw new Error("Comment author not found");
           results.push({
             id: comment.id,
             body: comment.body,
             createdAt: comment.createdAt.toISOString(),
-            user: user ? {
-              id: user.id,
-              name: user.name,
-            } : { id: "", name: "Unknown" },
+            user: { id: user.id, name: user.name },
           });
         }
 

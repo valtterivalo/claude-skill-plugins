@@ -19,27 +19,41 @@ const tableNameSchema = z.string().min(1).max(63).regex(sqlIdentifierPattern, {
   message: "Invalid table name. Must be a valid SQL identifier",
 });
 
-const filterOperatorSchema = z.enum([
-  "eq",
-  "neq",
-  "gt",
-  "gte",
-  "lt",
-  "lte",
-  "like",
-  "ilike",
-  "is",
-  "in",
-  "contains",
-  "containedBy",
-  "overlaps",
-]);
+const stringOpSchema = z.enum(["like", "ilike"]);
+const arrayOpSchema = z.enum(["in", "contains", "containedBy", "overlaps"]);
+const nullBoolOpSchema = z.enum(["is"]);
+const anyOpSchema = z.enum(["eq", "neq", "gt", "gte", "lt", "lte"]);
 
-const filterConditionSchema = z.object({
+const stringFilterSchema = z.object({
   column: columnNameSchema,
-  op: filterOperatorSchema,
+  op: stringOpSchema,
+  value: z.string(),
+});
+
+const arrayFilterSchema = z.object({
+  column: columnNameSchema,
+  op: arrayOpSchema,
+  value: z.array(z.unknown()),
+});
+
+const nullBoolFilterSchema = z.object({
+  column: columnNameSchema,
+  op: nullBoolOpSchema,
+  value: z.union([z.null(), z.boolean()]),
+});
+
+const anyFilterSchema = z.object({
+  column: columnNameSchema,
+  op: anyOpSchema,
   value: z.unknown(),
 });
+
+const filterConditionSchema = z.union([
+  stringFilterSchema,
+  arrayFilterSchema,
+  nullBoolFilterSchema,
+  anyFilterSchema,
+]);
 
 const orderConfigSchema = z.object({
   column: columnNameSchema,

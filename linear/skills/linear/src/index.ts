@@ -36,7 +36,7 @@ if (!API_KEY.startsWith("lin_api_")) {
 const client = createLinearClient({ apiKey: API_KEY });
 
 const app = express();
-app.use(express.json());
+app.use(express.json({ limit: "10kb" }));
 
 app.get("/", (_req, res) => {
   res.json({

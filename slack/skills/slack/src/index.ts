@@ -253,7 +253,7 @@ async function handleAction(request: ActionRequest): Promise<ActionResponse> {
 }
 
 const app = express();
-app.use(express.json());
+app.use(express.json({ limit: "10kb" }));
 
 app.get("/", (_req, res) => {
   res.json({

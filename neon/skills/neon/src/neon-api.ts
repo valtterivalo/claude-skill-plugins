@@ -209,7 +209,7 @@ export function createNeonClient(config: NeonApiConfig) {
 
         const result = await this.run(
           connectionUri,
-          `EXPLAIN (ANALYZE, FORMAT TEXT) ${query}`,
+          `EXPLAIN (ANALYZE, FORMAT TEXT) SELECT * FROM (${query}) AS _explain_subq`,
           []
         );
         return result.rows

@@ -6,9 +6,13 @@ import { z } from "zod";
 
 const VALID_CATEGORIES = ["search", "pages", "databases", "blocks", "comments"] as const;
 
-const notionIdPattern = /^[a-f0-9-]{32,36}$/;
+const UUID_PATTERN = /^[a-f0-9]{8}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{12}$/;
+const RAW_ID_PATTERN = /^[a-f0-9]{32}$/;
 
-export const notionIdSchema = z.string().regex(notionIdPattern, "Invalid Notion ID format");
+export const notionIdSchema = z.string().refine(
+  (val) => UUID_PATTERN.test(val) || RAW_ID_PATTERN.test(val),
+  { message: "Invalid Notion ID format. Must be UUID or 32-char hex string" }
+);
 
 export const actionRequestSchema = z.object({
   category: z.enum(VALID_CATEGORIES),
@@ -33,8 +37,18 @@ export function normalizeNotionId(idOrUrl: string): string {
       const raw = match[1];
       return `${raw.slice(0, 8)}-${raw.slice(8, 12)}-${raw.slice(12, 16)}-${raw.slice(16, 20)}-${raw.slice(20)}`;
     }
+    throw new Error("Could not extract Notion ID from URL");
   }
-  return idOrUrl.replace(/-/g, "").replace(/(.{8})(.{4})(.{4})(.{4})(.{12})/, "$1-$2-$3-$4-$5");
+
+  if (UUID_PATTERN.test(idOrUrl)) {
+    return idOrUrl;
+  }
+
+  if (RAW_ID_PATTERN.test(idOrUrl)) {
+    return `${idOrUrl.slice(0, 8)}-${idOrUrl.slice(8, 12)}-${idOrUrl.slice(12, 16)}-${idOrUrl.slice(16, 20)}-${idOrUrl.slice(20)}`;
+  }
+
+  throw new Error("Invalid Notion ID format");
 }
 
 export const searchQuerySchema = z.string().min(1).max(200);
