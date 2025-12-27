@@ -9,28 +9,28 @@
       "source": "./neon",
       "description": "Manage Neon PostgreSQL databases - projects, branches, SQL queries",
       "keywords": ["neon", "postgres", "database", "sql"],
-      "skills": ["./neon/skills/neon"]
+      "skills": ["./skills/neon"]
     },
     {
       "name": "linear",
       "source": "./linear",
       "description": "Manage Linear issues and projects - search, create, update issues, track sprints",
       "keywords": ["linear", "issues", "projects", "sprints", "tickets"],
-      "skills": ["./linear/skills/linear"]
+      "skills": ["./skills/linear"]
     },
     {
       "name": "supabase",
       "source": "./supabase",
       "description": "Query and manage Supabase databases - CRUD operations, RPC functions, table introspection",
       "keywords": ["supabase", "postgres", "database", "sql", "backend"],
-      "skills": ["./supabase/skills/supabase"]
+      "skills": ["./skills/supabase"]
     },
     {
       "name": "slack",
       "source": "./slack",
       "description": "Send messages, manage channels, list users, add reactions in Slack",
       "keywords": ["slack", "messaging", "channels", "chat", "team"],
-      "skills": ["./slack/skills/slack"]
+      "skills": ["./skills/slack"]
     }
   ],
   "metadata": {
