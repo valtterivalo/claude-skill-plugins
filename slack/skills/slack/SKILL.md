@@ -133,6 +133,11 @@ Get message history:
 {"category": "messages", "action": "history", "params": {"channel": "C0123456789", "limit": 20}}
 ```
 
+Get thread replies:
+```json
+{"category": "messages", "action": "replies", "params": {"channel": "C0123456789", "ts": "1234567890.123456", "limit": 50}}
+```
+
 ### Users
 
 List users:
@@ -200,6 +205,11 @@ Get file info:
 
 1. Get history for the channel
 2. Use a message's `ts` as `threadTs` when posting a reply
+
+### Read Thread Replies
+
+1. Get history for the channel to find messages with `replyCount > 0`
+2. Use the message's `ts` with the `replies` action to fetch all thread messages
 
 ### Find User and Send DM
 

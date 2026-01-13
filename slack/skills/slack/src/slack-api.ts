@@ -192,6 +192,26 @@ export const messages = {
       mapMessage
     );
   },
+
+  async replies(options: {
+    channel: string;
+    ts: string;
+    limit?: number;
+    oldest?: string;
+    latest?: string;
+  }): Promise<MessageResult[]> {
+    const client = getClient();
+    const result = await client.conversations.replies({
+      channel: options.channel,
+      ts: options.ts,
+      limit: options.limit ?? 50,
+      oldest: options.oldest,
+      latest: options.latest,
+    });
+    return ((result.messages as Record<string, unknown>[]) ?? []).map(
+      mapMessage
+    );
+  },
 };
 
 export const users = {

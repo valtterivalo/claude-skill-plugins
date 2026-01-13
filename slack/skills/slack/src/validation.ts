@@ -87,6 +87,13 @@ export const actionSchemas = {
       oldest: slackTimestampSchema.optional(),
       latest: slackTimestampSchema.optional(),
     }),
+    replies: z.object({
+      channel: slackChannelIdSchema,
+      ts: slackTimestampSchema,
+      limit: limitSchema,
+      oldest: slackTimestampSchema.optional(),
+      latest: slackTimestampSchema.optional(),
+    }),
   },
   users: {
     list: z.object({

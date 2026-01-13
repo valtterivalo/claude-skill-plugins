@@ -123,9 +123,13 @@ async function handleMessagesAction(
       const validated = validateParams("messages", "history", params);
       return messages.history(validated);
     }
+    case "replies": {
+      const validated = validateParams("messages", "replies", params);
+      return messages.replies(validated);
+    }
     default:
       throw new SlackSkillError(
-        `Unknown messages action: ${action}. Available: post, update, delete, history`
+        `Unknown messages action: ${action}. Available: post, update, delete, history, replies`
       );
   }
 }
@@ -286,7 +290,7 @@ app.get("/categories", (_req, res) => {
   res.json({
     categories: {
       channels: ["list", "info", "members", "create", "archive", "join"],
-      messages: ["post", "update", "delete", "history"],
+      messages: ["post", "update", "delete", "history", "replies"],
       users: ["list", "info", "lookup_by_email", "me"],
       reactions: ["add", "remove", "get"],
       files: ["list", "info"],
